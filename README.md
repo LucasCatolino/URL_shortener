@@ -1,5 +1,5 @@
 # Awesome URL shortener
-#### Prerequisites
+## Prerequisites
 In order to run this project, user must have installed:
 
 - [Python](https://www.python.org/downloads/)
@@ -20,7 +20,7 @@ In order to run this project, user must have installed:
     docker run --name Myredis -p 6379:6379 -d redis
     ```
 
-#### Running the project
+## Running the project
 1. Start Docker
 2. Start MongoDB
     ```
@@ -36,5 +36,5 @@ In order to run this project, user must have installed:
     uvicorn main:app --reload
     ```
 
-#### Swagger
+## Swagger
 In case of wanting to read API documentation or test endpoints manually, Swagger may be found in [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
