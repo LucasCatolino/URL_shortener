@@ -1,10 +1,10 @@
 # Awesome URL shortener
 The idea of this project is to create a polyglot solution to the problem of long and user-unfriendly URLs. For this solution Redis and MongoDB where used to store URLs and stadistics about clicks.
-
 Redis was used as a key-value database (key: short URL, value: long URL), and MongoDB was used to store clicks' information such as date of click, device, etc.
 
 ## Contents
 - [Prerequisites](#prerequisites)
+- [Project structure](#project-structure)
 - [Running the project](#running-the-project)
 - [Swagger](#swagger)
 
@@ -27,6 +27,16 @@ In order to run this project, user must have installed:
     docker pull redis
     docker run --name Myredis -p 6379:6379 -d redis
     ```
+
+## Project structure
+- api: contains API files
+    - mongo: contains MongoDB management files
+        - models: contains the schema for the data, representing how it will be stored in Mongo
+        - routes: contains the endpoints, and which function each of them will call
+        - mongo_connection.py: manages configuration data for connection (host and port), and helper functions
+    - red: contains Redis management files
+        - routes: contains the endpoints, and which function each of them will call
+        - redis_connection.py: manages configuration data for connection (host and port), and helper functions
 
 ## Running the project
 1. Start Docker

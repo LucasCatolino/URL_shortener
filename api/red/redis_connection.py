@@ -31,12 +31,12 @@ def get_routes_from_cache(key: str) -> str:
     return val
 
 
-def set_routes_to_cache(key: str, value: str) -> bool:
+def set_routes_to_cache(key: str, value: str, time: float) -> bool:
     """Data to redis."""
 
     state = client.setex(
         key,
-        timedelta(hours=24),
+        timedelta(hours=time),
         value=value,
     )
     return state
@@ -60,15 +60,23 @@ async def get_from_redis_cache(url: str) -> dict:
         data_dict["cache"] = True
         return data_dict
 
-async def set_to_redis(url_short: str, url: str) -> dict:
-    #state= set_routes_to_cache(key=json.dumps(url_short), value=json.dumps(url))
-    state= set_routes_to_cache(url_short, url)
+async def set_to_redis_expiring(url_short: str, url: str, time: float) -> dict:
+    state= set_routes_to_cache(url_short, url, time)
     if state is True:
         return json.dumps(state)
     return state
 
 async def get_from_redis(url: str) -> dict:
     state= get_routes_from_cache(url)
+    if state is True:
+        return json.dumps(state)
+    return state
+
+async def set_to_redis_inf(url_short: str, url: str) -> dict:
+    state= client.set(
+        url_short,
+        value=url,
+    )
     if state is True:
         return json.dumps(state)
     return state
