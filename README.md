@@ -1,7 +1,14 @@
 # Awesome URL shortener
+The idea of this project is to create a polyglot solution to the problem of long and user-unfriendly URLs. For this solution Redis and MongoDB where used to store URLs and stadistics about clicks.
+Redis was used as a key-value database (key: short URL, value: long URL), and MongoDB was used to store clicks' information such as date of click, device, etc.
+
+## Contents
+- [Prerequisites](#prerequisites)
+- [Running the project](#running-the-project)
+- [Swagger](#swagger)
+
 ## Prerequisites
 In order to run this project, user must have installed:
-
 - [Python](https://www.python.org/downloads/)
 - [FastAPI](https://fastapi.tiangolo.com/#installation)
     ```
