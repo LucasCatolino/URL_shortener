@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from red.routes.urls import router as UrlRouter
 from mongo.routes.student import router as StudentRouter
 from mongo.routes.url import router as UrlRouterMongo
+from mongo.routes.access_log import router as AccessLogRouter
 
 
 app = FastAPI()
@@ -12,6 +13,7 @@ app.include_router(UrlRouter, tags=["URL"], prefix="/url")
 #Mongo endpoints
 #app.include_router(StudentRouter, tags=["Student"], prefix="/student")
 app.include_router(UrlRouterMongo, tags=["URL"], prefix="/url_mongo")
+app.include_router(AccessLogRouter, tags=["Access log"], prefix="/access_log")
 
 @app.get("/")
 def read_root():

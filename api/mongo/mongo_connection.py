@@ -1,3 +1,4 @@
+from hashlib import new
 import motor.motor_asyncio
 from bson.objectid import ObjectId
 
@@ -7,9 +8,11 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.students
 student_collection = database.get_collection("students_collection")
 
-database_url = client.urls
-url_collection = database_url.get_collection("url_collection")
+url_database = client.urls
+url_collection = url_database.get_collection("url_collection")
 
+access_log_database = client.access_logs
+access_log_collection = access_log_database.get_collection("access_log_collection")
 
 #Helpers
 def student_helper(student) -> dict:
@@ -27,6 +30,16 @@ def url_helper(url) -> dict:
         "url_short": url["url_short"],
         "url_long": url["url_long"],
         "creation_time": url["creation_time"],
+    }
+
+def access_log_helper(access_log) -> dict:
+    return {
+        "_id": str(access_log["_id"]),
+        "url_id": access_log["url_id"],
+        "device": access_log["device"],
+        "ip": access_log["ip"],
+        "location": access_log["location"],
+        "creation_time": access_log["creation_time"],
     }
 
 # Retrieve all students present in the database
@@ -85,8 +98,14 @@ async def retrieve_url(id: str) -> dict:
     if url:
         return url_helper(url)
 """
-# Retrieve a url with a matching URL #62bdf28005afc7764cfc82ab
+# Retrieve a url with a matching short URL
 async def retrieve_url_short(id: str) -> dict:
     url = await url_collection.find_one({'url_short': id })
     if url:
         return url_helper(url)
+
+# Add a new access log into to the database
+async def add_access_log(access_log_data: dict) -> dict:
+    access_log = await access_log_collection.insert_one(access_log_data)
+    new_access_log = await access_log_collection.find_one({"_id": access_log.inserted_id})
+    return access_log_helper(new_access_log)

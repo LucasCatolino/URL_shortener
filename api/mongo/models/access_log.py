@@ -7,10 +7,10 @@ from pydantic import BaseModel, Field
 
 class AccessLogSchema(BaseModel):
     url_id: str = Field(...)
-    device: str
-    ip: str
-    location: str
-    creation_time: datetime = Field(...)
+    device: str = Field(None)
+    ip: str = Field(None)
+    location: str = Field(None)
+    creation_time: str = Field(...)
     
     class Config:
         schema_extra = {
