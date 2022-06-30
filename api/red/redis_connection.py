@@ -25,43 +25,43 @@ client = redis_connect()
 
 #Helpers
 def get_routes_from_cache(key: str) -> str:
-    """Data from redis."""
-
+    #Data from redis
     val = client.get(key)
     return val
 
 
-def set_routes_to_cache(key: str, value: str, time: float) -> bool:
-    """Data to redis."""
-
+def set_routes_to_cache(key: str, value: str) -> bool:
+    #Data to redis
     state = client.setex(
         key,
-        timedelta(hours=time),
+        timedelta(hours=24),
         value=value,
     )
     return state
 
 
 async def get_from_redis_cache(url: str) -> dict:
-
-    url = {"url": url}
-
     # First it looks for the data in redis cache
-    data = get_routes_from_cache(key=json.dumps(url))
-    print(data)
-    print(type(data))
+    data = get_routes_from_cache(url)
 
     # If cache is found then serves the data from cache
     if data is not None:
-        data = data.decode("UTF-8")
-        data_dict = json.loads(data)
-        print(data_dict)
-        print(type(data_dict))
-        data_dict["cache"] = True
-        return data_dict
+        return data
+    
+    else:
+        # If cache is not found then sends request to Mongo Api
+        data = 'mongo' #await get_from_mongo(url) #TODO: si no esta en Redis, buscar en Mongo
 
-async def set_to_redis_expiring(url_short: str, url: str, time: float) -> dict:
-    state= set_routes_to_cache(url_short, url, time)
+        # Saves the respose to redis and serves it directly
+        state = set_routes_to_cache(url, data)
+
+        if state is True:
+            return json.dumps(data)
+        return data
+
+
+async def set_to_redis(url_short: str, url: str) -> dict:
+    state= set_routes_to_cache(url_short, url)
     if state is True:
         return json.dumps(state)
     return state
@@ -72,7 +72,9 @@ async def get_from_redis(url: str) -> dict:
         return json.dumps(state)
     return state
 
-async def set_to_redis_inf(url_short: str, url: str) -> dict:
+    """
+    #TODO: eliminar esto
+    async def set_to_redis_inf(url_short: str, url: str) -> dict:
     state= client.set(
         url_short,
         value=url,
@@ -80,3 +82,4 @@ async def set_to_redis_inf(url_short: str, url: str) -> dict:
     if state is True:
         return json.dumps(state)
     return state
+    """

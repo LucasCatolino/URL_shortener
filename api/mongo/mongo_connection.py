@@ -7,6 +7,9 @@ client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_DETAILS)
 database = client.students
 student_collection = database.get_collection("students_collection")
 
+database_url = client.urls
+url_collection = database_url.get_collection("url_collection")
+
 
 #Helpers
 def student_helper(student) -> dict:
@@ -16,6 +19,14 @@ def student_helper(student) -> dict:
         "course_of_study": student["course_of_study"],
         "year": student["year"],
         "GPA": student["gpa"],
+    }
+
+def url_helper(url) -> dict:
+    return {
+        "id": str(url["_id"]),
+        "url_short": url["url_short"],
+        "url_long": url["url_long"],
+        "creation_time": url["creation_time"],
     }
 
 # Retrieve all students present in the database
@@ -61,3 +72,21 @@ async def delete_student(id: str):
     if student:
         await student_collection.delete_one({"_id": ObjectId(id)})
         return True
+
+# Add a new url into to the database
+async def add_url(url_data: dict) -> dict:
+    url = await url_collection.insert_one(url_data)
+    new_url = await url_collection.find_one({"_id": url.inserted_id})
+    return url_helper(new_url)
+"""
+# Retrieve a url with a matching ID #62bdf28005afc7764cfc82ab
+async def retrieve_url(id: str) -> dict:
+    url = await url_collection.find_one({"_id": ObjectId(id)})
+    if url:
+        return url_helper(url)
+"""
+# Retrieve a url with a matching URL #62bdf28005afc7764cfc82ab
+async def retrieve_url_short(id: str) -> dict:
+    url = await url_collection.find_one({'url_short': id })
+    if url:
+        return url_helper(url)
