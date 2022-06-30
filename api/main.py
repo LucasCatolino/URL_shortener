@@ -15,4 +15,4 @@ app.include_router(UrlRouterMongo, tags=["URL"], prefix="/url_mongo")
 
 @app.get("/")
 def read_root():
-    return {"Welcome to": "URL short"}
+    return {"URL shortening version": "1.0"}
