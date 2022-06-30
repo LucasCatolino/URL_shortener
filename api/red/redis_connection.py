@@ -55,14 +55,18 @@ async def get_from_redis_cache(url: str) -> dict:
         # If cache is not found then sends request to Mongo Api
         data = await retrieve_url_short(url) #'mongo' #await get_from_mongo(url) #TODO: si no esta en Redis, buscar en Mongo
 
-        # Saves the respose to redis and serves it directly
-        returning_url= jsonable_encoder(data)['url_long']
-        state = set_routes_to_cache(key= url, value= returning_url)
+        
+        data_json=  jsonable_encoder(data)
+        if data_json is not None:
+            
+            # Saves the respose to redis and serves it directly
+            returning_url= data_json['url_long']
+            state = set_routes_to_cache(key= url, value= returning_url)
 
-        if state is True:
-            return returning_url
-        return data
-
+            if state is True:
+                return returning_url
+            return data
+    return None
 
 async def set_to_redis(url_short: str, url: str) -> dict:
     state= set_routes_to_cache(url_short, url)
