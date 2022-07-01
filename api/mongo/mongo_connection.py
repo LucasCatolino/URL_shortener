@@ -109,3 +109,24 @@ async def add_access_log(access_log_data: dict) -> dict:
     access_log = await access_log_collection.insert_one(access_log_data)
     new_access_log = await access_log_collection.find_one({"_id": access_log.inserted_id})
     return access_log_helper(new_access_log)
+
+# Retrieve all access logs present in the database
+async def retrieve_access_logs():
+    access_logs = []
+    async for access_log in access_log_collection.find():
+        access_logs.append(access_log_helper(access_log))
+    return access_logs
+
+# Retrieve all access logs present in the database
+async def retrieve_locations(id: str):
+    locations = []
+    async for access_log in access_log_collection.find({'url_id': id }):
+        locations.append(access_log_helper(access_log))
+    return locations
+
+# Retrieve id from short URL
+async def retrieve_id(id: str):
+    id = await url_collection.find_one({'url_short': id })
+    if id:
+        return url_helper(id)['id']
+    return None
