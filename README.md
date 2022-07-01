@@ -23,10 +23,27 @@ In order to run this project, user must have installed:
     docker pull mongo
     docker run --name Mymongo –p 27017:27017 -d mongo
     ```
+    In order to connect MongoDB with FastAPI:
+    ```
+    pip install motor
+    ```
 - [Redis](https://hub.docker.com/_/redis)
     ```
     docker pull redis
     docker run --name Myredis -p 6379:6379 -d redis
+    ```
+    In order to connect Redis with FastAPI:
+    ```
+    pip install poetry
+    pip install aioredis
+    poetry init
+    poetry add aioredis
+    poetry add fastapi uvicorn gunicorn
+    ```
+	
+	To automatically install all requirements:
+    ```
+    pip install -r requirements.txt
     ```
 
 ## Project structure
