@@ -1,7 +1,3 @@
-from typing import Optional
-import datetime
-from bson import List
-
 from pydantic import BaseModel, Field
 
 
@@ -15,7 +11,7 @@ class AccessLogSchema(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "url_id": "123",
+                "url_id": "62bdf20e63a1cfb8521231d0",
                 "device": "Moto G1",
                 "ip": "127.0.0.1",
                 "location": "Argentina",

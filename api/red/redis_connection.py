@@ -26,6 +26,7 @@ def redis_connect() -> redis.client.Redis:
 
 client = redis_connect()
 
+
 #Helpers
 def get_routes_from_cache(key: str) -> str:
     #Data from redis
@@ -55,10 +56,8 @@ async def get_from_redis_cache(url: str) -> dict:
         # If cache is not found then sends request to Mongo Api
         data = await retrieve_url_short(url) #'mongo' #await get_from_mongo(url) #TODO: si no esta en Redis, buscar en Mongo
 
-        
         data_json=  jsonable_encoder(data)
         if data_json is not None:
-            
             # Saves the respose to redis and serves it directly
             returning_url= data_json['url_long']
             state = set_routes_to_cache(key= url, value= returning_url)
@@ -68,26 +67,17 @@ async def get_from_redis_cache(url: str) -> dict:
             return data
     return None
 
+
+# Add a URL to redis
 async def set_to_redis(url_short: str, url: str) -> dict:
     state= set_routes_to_cache(url_short, url)
     if state is True:
         return json.dumps(state)
     return state
 
+# Retrieve a URL to redis
 async def get_from_redis(url: str) -> dict:
     state= get_routes_from_cache(url)
     if state is True:
         return json.dumps(state)
     return state
-
-    """
-    #TODO: eliminar esto
-    async def set_to_redis_inf(url_short: str, url: str) -> dict:
-    state= client.set(
-        url_short,
-        value=url,
-    )
-    if state is True:
-        return json.dumps(state)
-    return state
-    """

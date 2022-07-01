@@ -17,12 +17,14 @@ from mongo.models.access_log import (
 
 router = APIRouter()
 
+
 #Create
 @router.post("/", response_description="Access log data added into the database")
 async def add_access_log_data(access_log: AccessLogSchema = Body(...)):
     access_log = jsonable_encoder(access_log)
     new_access_log = await add_access_log(access_log)
     return ResponseModel(new_access_log, "Access log added successfully.")
+
 
 #Read
 @router.get("/", response_description="Access log data retrieved")
@@ -32,6 +34,7 @@ async def get_access_logs():
         return ResponseModel(access_logs, "Access log data retrieved successfully")
     return ResponseModel(access_logs, "Empty list returned")
 
+
 #Read
 @router.get("/id/{url_short}", response_description="ID retrieved")
 async def get_id(url_short):
@@ -39,6 +42,7 @@ async def get_id(url_short):
     if id:
         return ResponseModel(id, "ID retrieved successfully")
     return ResponseModel(id, "Empty list returned")
+
 
 #Read
 @router.get("/dates/{url_id}", response_description="Dates data retrieved")
@@ -48,6 +52,7 @@ async def get_dates(url_id):
         return ResponseModel(dates, "Dates data retrieved successfully")
     return ResponseModel(dates, "Empty list returned")
 
+
 #Read
 @router.get("/devices/{url_id}", response_description="Devices data retrieved")
 async def get_devices(url_id):
@@ -55,6 +60,7 @@ async def get_devices(url_id):
     if devices:
         return ResponseModel(devices, "Devices data retrieved successfully")
     return ResponseModel(devices, "Empty list returned")
+
 
 #Read
 @router.get("/locations/{url_id}", response_description="Locations data retrieved")
