@@ -117,6 +117,13 @@ async def retrieve_access_logs():
         access_logs.append(access_log_helper(access_log))
     return access_logs
 
+# Retrieve id from short URL
+async def retrieve_id(id: str):
+    id = await url_collection.find_one({'url_short': id })
+    if id:
+        return url_helper(id)['id']
+    return None
+
 # Retrieve dates for URL
 async def retrieve_dates(id: str):
     dates = await access_log_collection.aggregate([
@@ -130,26 +137,27 @@ async def retrieve_dates(id: str):
         { '$sort' : { '_id' : 1 } }
     ]).to_list(length=None)
     return dates
-    """
-    locations = []
-    async for access_log in access_log_collection.find({'url_id': id }):
-        locations.append(access_log_helper(access_log))
-    return locations
-    """
-    
-    """
-    locations_by_id = await access_log_collection.find({'url_id': id }).aggregate([ { '$group': {
-        '_id': {
-            '$dateToString': {
-                'date': { '$toDate': "$creation_time" }, format: "%Y-%m-%d" } },
-                'n': { '$sum': 1 }
-        } } ])
-    return locations_by_id
-    """
 
-# Retrieve id from short URL
-async def retrieve_id(id: str):
-    id = await url_collection.find_one({'url_short': id })
-    if id:
-        return url_helper(id)['id']
-    return None
+# Retrieve dates for URL
+async def retrieve_devices(id: str):
+    devices = await access_log_collection.aggregate([
+        { '$match': { 'url_id': id } },
+        { '$group': {
+        '_id': '$device',
+	      'n': { '$sum': 1}}
+        },
+        { '$sort' : { '_id' : 1 } }
+    ]).to_list(length=None)
+    return devices
+
+# Retrieve locations for URL
+async def retrieve_locations(id: str):
+    locations = await access_log_collection.aggregate([
+        { '$match': { 'url_id': id } },
+        { '$group': {
+        '_id': '$location',
+	      'n': { '$sum': 1}}
+        },
+        { '$sort' : { '_id' : 1 } }
+    ]).to_list(length=None)
+    return locations

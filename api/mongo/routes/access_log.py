@@ -5,7 +5,9 @@ from mongo.mongo_connection import (
     add_access_log,
     retrieve_access_logs,
     retrieve_dates,
-    retrieve_id
+    retrieve_id,
+    retrieve_devices,
+    retrieve_locations
 )
 from mongo.models.access_log import (
     ErrorResponseModel,
@@ -31,6 +33,14 @@ async def get_access_logs():
     return ResponseModel(access_logs, "Empty list returned")
 
 #Read
+@router.get("/id/{url_short}", response_description="ID retrieved")
+async def get_id(url_short):
+    id = await retrieve_id(url_short)
+    if id:
+        return ResponseModel(id, "ID retrieved successfully")
+    return ResponseModel(id, "Empty list returned")
+
+#Read
 @router.get("/dates/{url_id}", response_description="Dates data retrieved")
 async def get_dates(url_id):
     dates = await retrieve_dates(url_id)
@@ -39,9 +49,17 @@ async def get_dates(url_id):
     return ResponseModel(dates, "Empty list returned")
 
 #Read
-@router.get("/id/{url_short}", response_description="ID retrieved")
-async def get_id(url_short):
-    id = await retrieve_id(url_short)
-    if id:
-        return ResponseModel(id, "ID retrieved successfully")
-    return ResponseModel(id, "Empty list returned")
+@router.get("/devices/{url_id}", response_description="Devices data retrieved")
+async def get_devices(url_id):
+    devices = await retrieve_devices(url_id)
+    if devices:
+        return ResponseModel(devices, "Devices data retrieved successfully")
+    return ResponseModel(devices, "Empty list returned")
+
+#Read
+@router.get("/locations/{url_id}", response_description="Locations data retrieved")
+async def get_locations(url_id):
+    locations = await retrieve_locations(url_id)
+    if locations:
+        return ResponseModel(locations, "Devices data retrieved successfully")
+    return ResponseModel(locations, "Empty list returned")
