@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from mongo.mongo_connection import (
     add_access_log,
     retrieve_access_logs,
-    retrieve_locations,
+    retrieve_dates,
     retrieve_id
 )
 from mongo.models.access_log import (
@@ -31,12 +31,12 @@ async def get_access_logs():
     return ResponseModel(access_logs, "Empty list returned")
 
 #Read
-@router.get("/locations/{url_id}", response_description="Locations data retrieved")
-async def get_locations(url_id):
-    locations = await retrieve_locations(url_id)
-    if locations:
-        return ResponseModel(locations, "Locations data retrieved successfully")
-    return ResponseModel(locations, "Empty list returned")
+@router.get("/dates/{url_id}", response_description="Dates data retrieved")
+async def get_dates(url_id):
+    dates = await retrieve_dates(url_id)
+    if dates:
+        return ResponseModel(dates, "Dates data retrieved successfully")
+    return ResponseModel(dates, "Empty list returned")
 
 #Read
 @router.get("/id/{url_short}", response_description="ID retrieved")

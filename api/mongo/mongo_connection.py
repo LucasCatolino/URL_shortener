@@ -117,12 +117,35 @@ async def retrieve_access_logs():
         access_logs.append(access_log_helper(access_log))
     return access_logs
 
-# Retrieve all access logs present in the database
-async def retrieve_locations(id: str):
+# Retrieve dates for URL
+async def retrieve_dates(id: str):
+    dates = await access_log_collection.aggregate([
+        { '$match': { 'url_id': id } },
+        { '$group': {
+        '_id': {
+            '$dateToString': {
+                'date': { '$toDate': "$creation_time" }, 'format': "%Y-%m-%d" } },
+                'n': { '$sum': 1 }
+        } },
+        { '$sort' : { '_id' : 1 } }
+    ]).to_list(length=None)
+    return dates
+    """
     locations = []
     async for access_log in access_log_collection.find({'url_id': id }):
         locations.append(access_log_helper(access_log))
     return locations
+    """
+    
+    """
+    locations_by_id = await access_log_collection.find({'url_id': id }).aggregate([ { '$group': {
+        '_id': {
+            '$dateToString': {
+                'date': { '$toDate': "$creation_time" }, format: "%Y-%m-%d" } },
+                'n': { '$sum': 1 }
+        } } ])
+    return locations_by_id
+    """
 
 # Retrieve id from short URL
 async def retrieve_id(id: str):
