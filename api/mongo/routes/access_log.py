@@ -67,5 +67,5 @@ async def get_devices(url_id):
 async def get_locations(url_id):
     locations = await retrieve_locations(url_id)
     if locations:
-        return ResponseModel(locations, "Devices data retrieved successfully")
+        return ResponseModel(locations, "Locations data retrieved successfully")
     return ResponseModel(locations, "Empty list returned")
