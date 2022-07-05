@@ -73,4 +73,7 @@ In order to run this project, user must have installed:
     ```
 
 ## Swagger
-In case of wanting to read API documentation or test endpoints manually, Swagger may be found in [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+In case of willing to read API documentation or test endpoints manually, Swagger may be found in [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+## Tester
+In case of willing to test functionality, a mock front can be found in https://observablehq.com/@lucascatolino/awesome-url-shortener-tester
